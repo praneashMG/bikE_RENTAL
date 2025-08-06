@@ -14,7 +14,10 @@ import FeaturedVehiclesGrid from "./components/FeaturedVehiclesGrid";
 import AddBikeForm from "./components/AddBikeForm";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
-import HeroWithRollingMountain from "./components/1. HeroWithRollingMountain";
+// import HeroWithRollingMountain from "./components/1. HeroWithRollingMountain";
+import WaihekeGuide from "./components/WaihekeGuide";
+// import ScooterGallery3D from "./components/ScooterGallery3D";
+import PopScooterGallery from "./components/PopScooterGallery";
 
 // Placeholder simple pages
 function Browse() {
@@ -68,7 +71,9 @@ function App() {
                   <>
                     <HeroSection />
                     <FeaturedVehiclesGrid />
-                    <HeroWithRollingMountain />
+                    {/* <HeroWithRollingMountain /> */}
+                    <WaihekeGuide/>
+                    <PopScooterGallery/>
                     {/* <Gallery /> */}
                   </>
                 }
