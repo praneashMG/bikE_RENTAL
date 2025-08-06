@@ -1,104 +1,85 @@
-// FeaturedVehiclesGrid.jsx
-import React from "react";
-import { useNavigate } from "react-router-dom"; // For navigation
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const vehicles = [
-  {
-    id: 1,
-    title: "Yamaha MT-15",
-    category: "Bike",
-    pricePerDay: 300,
-    location: "Bangalore",
-    imageUrl:
-      "https://s3.cloud.cmctelecom.vn/tinhte2/2019/08/4747397_Yamaha_MT-15_2019_Xe_Tinhte_9.jpg",
-    description: "Agile and stylish bike perfect for city rides.",
-  },
-  {
-    id: 2,
-    title: "Honda Activa",
-    category: "Scooter",
-    pricePerDay: 200,
-    location: "Chennai",
-    imageUrl: "https://etimg.etb2bimg.com/photo/112152572.cms",
-    description: "Reliable scooter, easy to handle for daily commute.",
-  },
-  {
-    id: 3,
-    title: "NS 200",
-    category: "Bike",
-    pricePerDay: 300,
-    location: "Mumbai",
-    imageUrl: "https://i.ytimg.com/vi/u8fBLjM5-ko/maxresdefault.jpg",
-    description: "Powerful and sporty bike with great road presence.",
-  },
-  {
-    id: 4,
-    title: "Royal Enfield Classic 350",
-    category: "Bike",
-    pricePerDay: 700,
-    location: "Hyderabad",
-    imageUrl:
-      "https://media.assettype.com/freepressjournal/2024-08-13/yzph8wjx/Royal%20Enfiel%20Classic%20350",
-    description: "Classic cruiser bike with comfortable riding.",
-  },
-];
-
-export default function FeaturedVehiclesGrid({ vehiclesData }) {
-  const featuredVehicles = vehiclesData ?? vehicles;
+export default function FeaturedVehiclesGrid() {
+  const [vehiclesData, setVehiclesData] = useState([]);
   const navigate = useNavigate();
+
+  const fetchVehicles = () => {
+    fetch("http://localhost/image_upload_project/get-vehicles.php")
+      .then((res) => res.json())
+      .then((data) => setVehiclesData(Array.isArray(data) ? data : []))
+      .catch(() => setVehiclesData([]));
+  };
+
+  useEffect(() => {
+    fetchVehicles();
+  }, []);
 
   const handleAddBike = () => {
     navigate("/add-bike");
   };
 
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       {/* Header with Add Button */}
-      <div className="flex justify-between items-center mb-8">
-        <h2 className="text-3xl font-bold text-gray-900">Featured Vehicles</h2>
+      <div className="flex justify-between items-center mb-10">
+        <h2 className="text-4xl font-extrabold text-gray-900 tracking-tight">
+          Featured Vehicles
+        </h2>
         <button
           onClick={handleAddBike}
-          className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+          className="inline-flex items-center justify-center rounded-md bg-orange-600 px-5 py-2 text-base font-medium text-white shadow-sm hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition"
+          aria-label="Add a new bike"
         >
           + Add Bike
         </button>
       </div>
 
-      {/* Grid of Vehicles */}
-      <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-        {featuredVehicles.map(
+      {/* Vehicles Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        {vehiclesData.map(
           ({ id, title, category, pricePerDay, location, imageUrl, description }) => (
-            <div
+            <article
               key={id}
-              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col"
+              className="group flex flex-col rounded-lg bg-white shadow-md ring-1 ring-gray-200 hover:shadow-lg hover:ring-orange-400 transition-shadow duration-300 cursor-pointer"
+              onClick={() => navigate(`/vehicles/${id}`)}
             >
-              <img
-                src={imageUrl}
-                alt={title}
-                className="h-48 w-full object-cover"
-                loading="lazy"
-                draggable={false}
-              />
-              <div className="p-4 flex flex-col flex-grow">
-                <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
-                <p className="text-sm text-gray-500 mb-1">
-                  {category} · {location}
+              <div className="relative h-48 w-full overflow-hidden rounded-t-lg">
+                <img
+                  src={imageUrl}
+                  alt={title}
+                  loading="lazy"
+                  draggable={false}
+                  className="h-full w-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                />
+              </div>
+              <div className="flex flex-col flex-grow p-5">
+                <h3 className="text-lg font-semibold text-gray-900 mb-1 line-clamp-2">
+                  {title}
+                </h3>
+                <p className="text-sm text-gray-600 mb-2">
+                  <span className="capitalize">{category}</span> &middot; {location}
                 </p>
-                <p className="text-gray-600 text-sm flex-grow">{description}</p>
-                <div className="mt-4 flex justify-between items-center">
-                  <span className="text-blue-600 font-bold">
+                <p className="text-gray-700 text-sm flex-grow line-clamp-3">{description}</p>
+                <div className="mt-5 flex items-center justify-between">
+                  <span className="text-orange-600 font-bold text-lg">
                     ₹{pricePerDay}
-                    <small className="text-gray-500 font-normal"> / day</small>
+                    <small className="text-gray-500 font-normal text-sm ml-1">/ day</small>
                   </span>
-                  <a
-                    href={`/vehicles/${id}`}
-                    className="text-sm font-semibold text-blue-500 hover:text-blue-700 transition"
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation(); // prevent card navigation
+                      navigate(`/vehicles/${id}`);
+                    }}
+                    className="text-orange-600 font-medium hover:underline focus:outline-none"
+                    aria-label={`View details for ${title}`}
                   >
-                    View Details
-                  </a>
+                    View Details →
+                  </button>
                 </div>
               </div>
-            </div>
+            </article>
           )
         )}
       </div>

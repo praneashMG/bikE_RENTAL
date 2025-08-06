@@ -46,10 +46,10 @@ const Footer = () => (
           <h5 className="font-semibold text-gray-800 mb-2">Contact Us</h5>
           <ul className="space-y-1 text-gray-500">
             <li className="flex items-center gap-2">
-              <FaEnvelope /> support@ridexchange.com
+              <FaEnvelope /> praneashp@gmail.com
             </li>
             <li className="flex items-center gap-2">
-              <FaPhoneAlt /> +1 (555) 123-4567
+              <FaPhoneAlt /> +91 9715499118
             </li>
           </ul>
           <div className="flex gap-4 mt-3">
